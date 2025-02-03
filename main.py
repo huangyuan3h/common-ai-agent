@@ -1,20 +1,28 @@
 from llm.llm_factory import create_llm_client
+from configure.config import Config
 
 def main():
-    # Ollama client configuration
-    ollama_config = {
-        "client_type": "ollama",
-        "model_name": "deepseek-r1:14b"  # You can change the model name here if needed
+    # Load configuration
+    config = Config()
+
+    # LLM client configuration from Config
+    llm_config = {
+        "client_type": config.get_config("llm.client_type"),
+        "model_name": config.get_config(f"llm.{config.get_config('llm.client_type')}.model_name")
     }
 
-    # Create Ollama client using the factory
-    ollama_client = create_llm_client(ollama_config)
+    # Add API key for Gemini if needed
+    if llm_config["client_type"] == "gemini":
+        llm_config["api_key"] = config.get_config("llm.gemini.api_key")
 
-    # Test Ollama client: generate text
+    # Create LLM client using the factory
+    llm_client = create_llm_client(llm_config)
+
+    # Test LLM client: generate text
     prompt = "请介绍一下 Langchain"
     print(f"Prompt: {prompt}")
-    response = ollama_client.generate_text(prompt, {})
-    print(f"Ollama Response:\n{response}")
+    response = llm_client.generate_text(prompt, {})
+    print(f"LLM Response:\n{response}")
 
     # You can add more tests or interactions here if needed
 

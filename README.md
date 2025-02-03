@@ -6,12 +6,31 @@
 
 Common AI Agent is an AI-powered assistant designed to process complex tasks by leveraging multiple components such as memory, context awareness, planning, and decomposition. It integrates various tools and interfaces to help with real-time actions, reflection, and refinement based on dynamic data. The agent can read files, perform searches, interface with code, and generate solutions through a structured problem-solving flow.
 
+## Configuration
+
+The project uses a YAML configuration file to manage settings. To get started:
+
+1. Copy the template configuration file:
+
+   ```bash
+   cp config.yaml.template config.yaml
+   ```
+
+2. Edit `config.yaml` with your settings:
+   ```yaml
+   llm:
+     client_type: ollama # Choose between 'ollama' or 'gemini'
+     ollama:
+       model_name: llama2
+     gemini:
+       model_name: gemini-pro
+       api_key: "YOUR_API_KEY_HERE" # Required for Gemini
+   ```
+
 ## environments
 
 ```
-
 conda create --name common-ai-agent python=3.10
-
 
 conda activate common-ai-agent
 ```
@@ -39,7 +58,7 @@ conda activate common-ai-agent
 
 6. **Actions**:
 
-   - Executes tasks based on the agent’s planning and inputs from the environment (e.g., read files, search the web, interact with code).
+   - Executes tasks based on the agent's planning and inputs from the environment (e.g., read files, search the web, interact with code).
 
 7. **Reflection and Refinement**:
    - After executing actions, the agent reflects on the outcome and refines its approach for improved efficiency and accuracy.

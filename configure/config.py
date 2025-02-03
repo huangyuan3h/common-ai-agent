@@ -1,5 +1,6 @@
 import json
 import os
+import yaml 
 
 class Config:
     _instance = None
@@ -12,8 +13,11 @@ class Config:
         return cls._instance
 
     def _load_config(self):
-        config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
-        template_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.yaml.template')
+        config_dir = os.path.dirname(__file__)
+        project_root = os.path.dirname(os.path.dirname(__file__))
+        
+        config_path = os.path.join(project_root, 'config.yaml')
+        template_path = os.path.join(project_root, 'config.yaml.template')
 
         if os.path.exists(config_path):
             with open(config_path, 'r') as file:
@@ -27,6 +31,11 @@ class Config:
         # Create config.yaml if it doesn't exist
         if not os.path.exists(config_path):
             self.save_config()
+
+    def save_config(self):
+        config_path = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'config.yaml')
+        with open(config_path, 'w') as file:
+            yaml.safe_dump(self.config_data, file, default_flow_style=False)
 
     def _load_default_config(self):
         self.config_data = {
@@ -59,11 +68,6 @@ class Config:
                 return None
             current = current[key]
         return current
-
-    def save_config(self):
-        config_path = os.path.join(os.path.dirname(__file__), 'config.yaml')
-        with open(config_path, 'w') as file:
-            yaml.safe_dump(self.config_data, file, default_flow_style=False)
 
     def print_config(self):
         print(yaml.dump(self.config_data, default_flow_style=False))

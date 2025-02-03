@@ -6,6 +6,16 @@
 
 Common AI Agent is an AI-powered assistant designed to process complex tasks by leveraging multiple components such as memory, context awareness, planning, and decomposition. It integrates various tools and interfaces to help with real-time actions, reflection, and refinement based on dynamic data. The agent can read files, perform searches, interface with code, and generate solutions through a structured problem-solving flow.
 
+## environments
+
+```
+
+conda create --name common-ai-agent python=3.10
+
+
+conda activate common-ai-agent
+```
+
 ## Components
 
 1. **RAG (Retrieval-Augmented Generation)**:

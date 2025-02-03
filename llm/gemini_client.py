@@ -17,7 +17,7 @@ class GeminiClient(LLMClient):
         """
         self.model_name = model_name
         self.api_key = api_key
-        self.llm = ChatGoogleGenerativeAI(model_name=self.model_name, google_api_key=self.api_key)
+        self.llm = ChatGoogleGenerativeAI(model=self.model_name, google_api_key=self.api_key)
 
     def generate_text(self, prompt: str, config: Dict[str, Any]) -> str:
         """

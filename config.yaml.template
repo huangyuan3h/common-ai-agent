@@ -1,0 +1,9 @@
+# LLM Configuration
+llm:
+  client_type: ollama
+  ollama:
+    model_name: deepseek-r1:32b
+  gemini:
+    model_name: gemini-pro
+    # Add your Gemini API key here
+    api_key: "YOUR_API_KEY_HERE"

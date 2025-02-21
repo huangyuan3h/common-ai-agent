@@ -1,37 +1,41 @@
-import unittest
+import pytest
 from llm.llm_factory import create_llm_client
-from llm.ollama_client import OllamaClient
+from config import Config
 from llm.gemini_client import GeminiClient
+from llm.ollama_client import OllamaClient
 
-class TestLLMFactory(unittest.TestCase):
+@pytest.fixture
+def config():
+    return Config()
 
-    def test_create_ollama_client(self):
-        config = {"client_type": "ollama", "model_name": "llama2"}
-        client = create_llm_client(config)
-        self.assertIsInstance(client, OllamaClient)
-        self.assertEqual(client.model_name, "llama2")
+def test_create_ollama_client(config):
+    config.set_config("llm.client_type", "ollama")
+    config.set_config("llm.ollama.model_name", "llama2")
+    
+    client = create_llm_client(config)
+    assert isinstance(client, OllamaClient)
+    assert client.model_name == "llama2"
 
-    def test_create_gemini_client(self):
-        config = {"client_type": "gemini", "api_key": "test_key", "model_name": "gemini-pro"}
-        client = create_llm_client(config)
-        self.assertIsInstance(client, GeminiClient)
-        self.assertEqual(client.model_name, "gemini-pro")
-        self.assertEqual(client.api_key, "test_key")
+def test_create_gemini_client(config):
+    config.set_config("llm.client_type", "gemini")
+    config.set_config("llm.gemini.model_name", "gemini-pro")
+    config.set_config("llm.gemini.api_key", "test_api_key")
+    
+    client = create_llm_client(config)
+    assert isinstance(client, GeminiClient)
+    assert client.model_name == "gemini-pro"
+    assert client.api_key == "test_api_key"
 
-    def test_create_gemini_client_missing_api_key(self):
-        config = {"client_type": "gemini", "model_name": "gemini-pro"}
-        with self.assertRaisesRegex(ValueError, "API key is required for Gemini client."):
-            create_llm_client(config)
+def test_invalid_client_type(config):
+    config.set_config("llm.client_type", "invalid_client")
+    
+    with pytest.raises(ValueError, match="Invalid client type: invalid_client"):
+        create_llm_client(config)
 
-    def test_create_invalid_client_type(self):
-        config = {"client_type": "invalid"}
-        with self.assertRaisesRegex(ValueError, "Invalid client type: invalid. Supported types are 'ollama', 'gemini'."):
-            create_llm_client(config)
-
-    def test_create_client_missing_client_type(self):
-        config = {"model_name": "llama2"}
-        with self.assertRaisesRegex(ValueError, "Configuration must contain 'client_type' to specify the LLM client."):
-            create_llm_client(config)
-
-if __name__ == '__main__':
-    unittest.main()
+def test_missing_api_key_for_gemini(config):
+    config.set_config("llm.client_type", "gemini")
+    config.set_config("llm.gemini.model_name", "gemini-pro")
+    config.set_config("llm.gemini.api_key", None)
+    
+    with pytest.raises(ValueError, match="API key is required for Gemini client."):
+        create_llm_client(config)

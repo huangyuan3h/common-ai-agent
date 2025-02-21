@@ -35,6 +35,12 @@ The project uses a YAML configuration file to manage settings. To get started:
        api_key: "YOUR_API_KEY_HERE" # Required for Gemini
    ```
 
+### testing
+
+```bash
+python -m pytest **/tests/
+```
+
 ## overall developing plan
 
 ```

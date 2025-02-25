@@ -1,20 +1,19 @@
-from llm.llm_factory import create_llm_client
+from agent.graph_builder import build_chatbot_graph
 from config import Config
+from langchain_core.messages import HumanMessage
 
 def main():
-    # Load configuration
+    # 初始化配置
     config = Config()
-
-    # Create LLM client using the factory with Config object
-    llm_client = create_llm_client(config)
-
-    # Test LLM client: generate text
-    prompt = "利用Langchain 去实现AI agent的思路"
-    print(f"Prompt: {prompt}")
-    response = llm_client.generate_text(prompt, {})
-    print(f"LLM Response:\n{response}")
-
-    # You can add more tests or interactions here if needed
+    
+    # 构建流程图
+    graph = build_chatbot_graph(config)
+    
+    # 测试流程
+    test_state = {
+        "messages": [HumanMessage(content="你好")]
+    }
+    print(graph.invoke(test_state))
 
 if __name__ == "__main__":
     main()

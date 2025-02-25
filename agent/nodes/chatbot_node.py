@@ -1,6 +1,6 @@
 from typing import Callable
 from langchain_core.messages import AIMessage, HumanMessage
-from agent.models.state import ChatState
+from agent.models.state import AgentState
 from llm.llm_factory import create_llm_client
 from config import Config
 
@@ -8,7 +8,7 @@ def create_chatbot_node(config: Config) -> tuple[str, Callable]:
     """创建对话节点（返回节点名称和函数）"""
     llm_client = create_llm_client(config)
     
-    def _chatbot_node(state: ChatState):
+    def _chatbot_node(state: AgentState):
         # 查找最后一条人类消息
         last_human_msg = next(
             (msg for msg in reversed(state["messages"]) 
